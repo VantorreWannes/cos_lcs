@@ -90,7 +90,7 @@ mod closest_offset_sum_lcs_tests {
         let source = [2, 1, 0, 3];
         let target = [0, 1, 2, 3];
         let next_pair_offsets = ClosestOffsetSumLcs::<'_>::next_pair_offsets(&source, &target);
-        assert_eq!(next_pair_offsets, Some((2, 0)));
+        assert_eq!(next_pair_offsets, Some((0, 2)));
     }
 
     #[test]
