@@ -1,3 +1,4 @@
+pub mod cos_lcs;
 pub mod lcs_trait;
 
 pub fn add(left: u64, right: u64) -> u64 {
