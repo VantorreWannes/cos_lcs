@@ -1,4 +1,4 @@
-use cos_lcs::{cos_lcs::ClosestOffsetSumLcs, lcs_trait::Lcs};
+use cos_lcs::{lcs_trait::Lcs, slow_lcs::SlowLcs};
 use divan::{black_box, Bencher};
 use rand::distributions::{Distribution, Uniform};
 
@@ -12,7 +12,7 @@ fn new(bencher: Bencher) {
     let target: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
     let source = black_box(&source);
     let target = black_box(&target);
-    bencher.bench_local(move || ClosestOffsetSumLcs::new(source, target));
+    bencher.bench_local(move || SlowLcs::new(source, target));
 }
 
 #[divan::bench]
@@ -21,7 +21,7 @@ fn length(bencher: Bencher) {
     let die: Uniform<u8> = Uniform::from(0..=255);
     let source: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
     let target: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
-    let lcs = ClosestOffsetSumLcs::new(black_box(&source), black_box(&target));
+    let lcs = SlowLcs::new(black_box(&source), black_box(&target));
     bencher.bench_local(move || lcs.len());
 }
 
@@ -31,6 +31,6 @@ fn subsequence(bencher: Bencher) {
     let die: Uniform<u8> = Uniform::from(0..=255);
     let source: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
     let target: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
-    let lcs = ClosestOffsetSumLcs::new(black_box(&source), black_box(&target));
+    let lcs = SlowLcs::new(black_box(&source), black_box(&target));
     bencher.bench_local(move || lcs.subsequence());
 }

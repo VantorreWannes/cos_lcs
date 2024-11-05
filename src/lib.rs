@@ -1,5 +1,6 @@
 pub mod cos_lcs;
 pub mod lcs_trait;
+pub mod slow_lcs;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
