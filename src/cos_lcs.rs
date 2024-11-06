@@ -1,3 +1,4 @@
+// Property of Wannes Vantorre. DO NOT distribute.
 use std::fmt::Debug;
 
 use crate::lcs_trait::Lcs;
