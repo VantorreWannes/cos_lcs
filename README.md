@@ -5,7 +5,7 @@ My own heuristic LCS algorithm
 This algorithm has a time complexity of O(N+M)
 
 ## Approximation factor 
-In the context of LCS approximation (A Maximisation Problem) the appxorimation factor is O(0.8)
+In the context of LCS approximation (A Maximisation Problem) the appxorimation factor is α(0.8)
 
 ## Compared sources
 - https://arxiv.org/abs/2111.10538
