@@ -7,8 +7,12 @@ edition = "2021"
 criterion = "0.5.1"
 rand = "0.8.5"
 plotters = "0.3.7"
+num-traits = "0.2.19"
+serde = "1.0.215"
+csv = "1.3.1"
 
 [[bench]]
 name = "main"
 harness = false
+
 
