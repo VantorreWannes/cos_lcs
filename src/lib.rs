@@ -2,30 +2,39 @@
 pub mod cos_lcs;
 pub mod lcs_trait;
 pub mod slow_lcs;
+pub mod stats;
 
 #[cfg(test)]
 mod tests {
-    use rand::{distributions::Uniform, prelude::Distribution};
+    use crate::{
+        cos_lcs::ClosestOffsetSumLcs,
+        lcs_trait::Lcs,
+        slow_lcs::SlowLcs,
+        stats::{generate_random_data, serialize_stats, ComparedLcsStats},
+    };
 
-    use crate::{cos_lcs::ClosestOffsetSumLcs, lcs_trait::Lcs, slow_lcs::SlowLcs};
-
-    const LENGTH: usize = 2500;
+    const LENGTHS: [usize; 10] = [10, 50, 100, 500, 1000, 1500, 2000, 2500, 3000, 3500];
+    const ALPHABET_SIZES: [u8; 8] = [0, 2, 4, 16, 32, 64, 128, 255];
 
     #[test]
-    fn test_accuracy() {
-        let mut rng = rand::thread_rng();
-        let die: Uniform<u8> = Uniform::from(0..=255);
-        let source: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
-        let target: Vec<u8> = die.sample_iter(&mut rng).take(LENGTH).collect();
-        let slow_lcs_len = SlowLcs::new(&source, &target).len();
-        let cos_lcs_len = ClosestOffsetSumLcs::new(&source, &target).len();
-        println!("SlowLcs LCS length: {}", slow_lcs_len);
-        println!("ClosestOffsetSum LCS length {}", cos_lcs_len);
-        println!(
-            "{} is {}% percent of {}",
-            cos_lcs_len,
-            (cos_lcs_len as f64 / slow_lcs_len as f64 * 100.0).round(),
-            slow_lcs_len
-        );
+    fn save_accuracy() {
+        let stats = lcs_stats(&LENGTHS, &ALPHABET_SIZES);
+        let mut file = std::fs::File::create("target/accuracy.csv").unwrap();
+        serialize_stats(&stats, &mut file).unwrap();
+    }
+
+    fn lcs_stats(lengths: &[usize], alphabet_sizes: &[u8]) -> Vec<ComparedLcsStats> {
+        let mut all_lcs_stats = vec![];
+        for &input_size in lengths {
+            for &alphabet_size in alphabet_sizes {
+                let (source, target) = generate_random_data(input_size, alphabet_size);
+                let cos_lcs = ClosestOffsetSumLcs::new(&source, &target);
+                let slow_lcs = SlowLcs::new(&source, &target);
+                let compared_lcs_stats =
+                    ComparedLcsStats::new(input_size, alphabet_size, cos_lcs.len(), slow_lcs.len());
+                all_lcs_stats.push(compared_lcs_stats);
+            }
+        }
+        all_lcs_stats
     }
 }
